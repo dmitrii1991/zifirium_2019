@@ -1,3 +1,4 @@
+import sys
 import logging
 import time
 
@@ -18,13 +19,12 @@ def get_result(in_data_a='in_data_a.csv', in_data_b='in_data_p.csv', out='out.cs
     length = int(df_in_data_a['id'].count())      # Для отображения прогресса
     start = time.time()
 
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s', stream=sys.stdout)
     logging.info('Старт программы')
 
     for i in df_in_data_a.index:
         if i % 1000 == 0:
             logging.info(f'обрабатано {round(i / length * 100)}% информации')
-
         try:
             app = df_in_data_a.loc[i, 'app']
             date = df_in_data_a.loc[i, 'Date']
