@@ -8,7 +8,7 @@ class Work:
     """
     Реализация класса Не только сохраняет выполнене задачи, но и обеспечивает взаимод с Tkinter
     """
-    def __init__(self, in_data_a='in_data_a.csv', in_data_b='in_data_p.csv', out='out.csv', ):
+    def __init__(self, in_data_a='in_data_a.csv', in_data_b='in_data_p.csv', out='out.csv'):
         self.out = out
         self.df_in_data_a = pd.read_csv(in_data_a)
         self.df_in_data_b = pd.read_csv(in_data_b)
@@ -64,7 +64,11 @@ class Work:
                         'cpi': float,}
         df_result = df_result.astype(convert_dict)
         df_result.to_csv(self.out, float_format='%.1f')
-        logging.info(f'Программа окончена за {round(time.time() - start)} секунд(ы), обработано строк - {i}')
+        if self.length == i:
+            logging.info(f'Программа окончена за {round(time.time() - start)} секунд(ы), обработано строк - {i}')
+        else:
+            logging.info(f'Программа полностью не завершена - {round(time.time() - start)} секунд(ы), обработано строк '
+                         f'- {i}, файл не записан')
         progress.set(0)
 
 if __name__ == '__main__':

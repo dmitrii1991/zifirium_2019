@@ -4,11 +4,5 @@ real,2019-03-01,MSK,server,0,185.0,0.0
 real,2019-03-01,MSK,windows,0,6.8,0.0
 real,2019-03-01,SPB,ios,2,475.2,50.1
 real,2019-03-01,SPB,server,0,45.5,0.0
-real,2019-03-02,MSK,ios,17,957.8,445.0
+real,2019-03-02,MSK,ios,13,784.8,395.8
 real,2019-03-02,MSK,server,0,100.3,0.0
-real,2019-03-02,SPB,ios,3,836.0,277.5
-real,2019-03-02,SPB,server,0,134.9,0.0
-real,2019-03-03,MSK,ios,17,942.6,179.5
-real,2019-03-03,MSK,server,0,0.0,0.0
-real,2019-03-03,MSK,unknown,0,0.0,0.0
-real,2019-03-03,SPB,ios,3,500.4,249.9
