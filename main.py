@@ -8,11 +8,10 @@ class Work:
     """
     Реализация класса Не только сохраняет выполнене задачи, но и обеспечивает взаимод с Tkinter
     """
-    def __init__(self, in_data_a='in_data_a.csv', in_data_b='in_data_p.csv', out='out.csv'):
+    def __init__(self, in_data_a='in_data_a.csv', in_data_p='in_data_p.csv', out='out.csv'):
         self.out = out
-        self.df_in_data_a = pd.read_csv(in_data_a)
-        self.df_in_data_b = pd.read_csv(in_data_b)
-        self.length = int(self.df_in_data_a['id'].count())
+        self.in_data_a = in_data_a
+        self.in_data_p = in_data_p
         self._running = None
 
     def terminate(self):
@@ -23,27 +22,31 @@ class Work:
 
     def first(self, progress=None, running=True):
         self._running = running
+        df_in_data_a = pd.read_csv(self.in_data_a)
+        df_in_data_p = pd.read_csv(self.in_data_p)
+        length = int(df_in_data_a['id'].count())
+
         start = time.time()
         logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s', stream=sys.stdout)
         logging.info('Старт программы')
         df_result = pd.DataFrame(dict(app=[], date=[], campaign=[], os=[], installs=[], spend=[], cpi=[]))
 
-        for i in self.df_in_data_a.index:
+        for i in df_in_data_a.index:
             if i % 1000 == 0:
-                logging.info(f'обрабатано {round(i /  self.length * 100)}% информации')
-                status = round(i / self.length * 100)
+                logging.info(f'обрабатано {round(i /  length * 100)}% информации')
+                status = round(i / length * 100)
                 if progress is not None and status != 0:
                     progress.set(status)
             if not self._running:  # остановка
                 break
             try:
-                app = self.df_in_data_a.loc[i, 'app']
-                date = self.df_in_data_a.loc[i, 'Date']
-                campaign = self.df_in_data_a.loc[i, 'Campaign']
-                os = self.df_in_data_a.loc[i, 'os']
-                installs = int(self.df_in_data_a.loc[i, 'Installs'])
-                spend = self.df_in_data_b[(self.df_in_data_b['ad_id'] == self.df_in_data_a.loc[i, 'ad_id']) &
-                                     (self.df_in_data_b['date'] == date)]['spend']
+                app = df_in_data_a.loc[i, 'app']
+                date = df_in_data_a.loc[i, 'Date']
+                campaign = df_in_data_a.loc[i, 'Campaign']
+                os = df_in_data_a.loc[i, 'os']
+                installs = int(df_in_data_a.loc[i, 'Installs'])
+                spend = df_in_data_p[(df_in_data_p['ad_id'] == df_in_data_a.loc[i, 'ad_id']) &
+                                     (df_in_data_p['date'] == date)]['spend']
                 if spend.empty:
                     spend = 0
                 else:
@@ -64,7 +67,7 @@ class Work:
                         'cpi': float,}
         df_result = df_result.astype(convert_dict)
         df_result.to_csv(self.out, float_format='%.1f')
-        if self.length == i:
+        if length == i:
             logging.info(f'Программа окончена за {round(time.time() - start)} секунд(ы), обработано строк - {i}')
         else:
             logging.info(f'Программа полностью не завершена - {round(time.time() - start)} секунд(ы), обработано строк '
